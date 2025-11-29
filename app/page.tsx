@@ -1,29 +1,40 @@
 "use client";
-import { Container, Box, Stepper, Step, StepLabel } from "@mui/material";
+import { Box, Stepper, Step, StepLabel } from "@mui/material";
 import { useState } from "react";
+// Step Components
+import LoginView from "./components/steps/LoginView";
+import IntroductionStep from "./components/steps/IntroductionStep";
 
 export default function Home() {
-	const [isAuthenticated, setIsAuthenticated] = useState(true);
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [activeStep, setActiveStep] = useState(0);
+	const [hasStarted, setHasStarted] = useState(false);
 
 	if (!isAuthenticated) {
-		return <div>Not logged in</div>;
+		return <LoginView />;
 	}
 
-	const stepLabels = ["step1", "step2", "step3"];
+	if (!hasStarted) {
+		return <IntroductionStep onStart={() => setHasStarted(true)} />;
+	}
+
+	const steps = [
+		{ label: "1", component: <IntroductionStep /> },
+		{ label: "2", component: <IntroductionStep /> },
+		{ label: "3", component: <IntroductionStep /> },
+		{ label: "4", component: <IntroductionStep /> },
+	];
 
 	return (
-		<Container maxWidth='lg' component={"main"}>
-			<Box>
-				<Box>{steps[activeStep]}</Box>
-				<Stepper activeStep={activeStep}>
-					{stepLabels.map((label) => (
-						<Step key={label}>
-							<StepLabel>{label}</StepLabel>
-						</Step>
-					))}
-				</Stepper>
-			</Box>
-		</Container>
+		<Box>
+			<Box>{steps[activeStep].component}</Box>
+			<Stepper activeStep={activeStep}>
+				{steps.map((step) => (
+					<Step key={step.label}>
+						<StepLabel>{step.label}</StepLabel>
+					</Step>
+				))}
+			</Stepper>
+		</Box>
 	);
 }
