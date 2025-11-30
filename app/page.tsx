@@ -11,7 +11,7 @@ export default function Home() {
 	const [hasStarted, setHasStarted] = useState(false);
 
 	if (!isAuthenticated) {
-		return <LoginView />;
+		return <LoginView onSuccess={() => setIsAuthenticated(true)} />;
 	}
 
 	if (!hasStarted) {
